@@ -1,0 +1,6 @@
+package config
+
+var (
+	GRPC_SERVER_ADDR = "127.0.0.1:10000"
+	HTTP_SERVER_ADDR = "127.0.0.1:10001"
+)
