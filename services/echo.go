@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/boxgo/grpc/api"
+	"github.com/BiteBit/grpc-gateway-example/api"
 )
 
 type (

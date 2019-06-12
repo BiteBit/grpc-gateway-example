@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/boxgo/grpc/api"
-	"github.com/boxgo/grpc/config"
+	"github.com/BiteBit/grpc-gateway-example/api"
+	"github.com/BiteBit/grpc-gateway-example/config"
 	"google.golang.org/grpc"
 )
 

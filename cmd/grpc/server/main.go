@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/boxgo/grpc/api"
-	"github.com/boxgo/grpc/config"
-	"github.com/boxgo/grpc/services"
+	"github.com/BiteBit/grpc-gateway-example/api"
+	"github.com/BiteBit/grpc-gateway-example/config"
+	"github.com/BiteBit/grpc-gateway-example/services"
 	"google.golang.org/grpc"
 )
 
