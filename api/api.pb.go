@@ -6,12 +6,15 @@ package api
 import (
 	context "context"
 	fmt "fmt"
+	gin "github.com/gin-gonic/gin"
+	jsonpb "github.com/golang/protobuf/jsonpb"
 	proto "github.com/golang/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
+	http "net/http"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -83,6 +86,35 @@ var fileDescriptor_1b40cafcd4234784 = []byte{
 	0x49, 0x40, 0xbf, 0xcc, 0x50, 0x3f, 0xb5, 0x22, 0x31, 0xb7, 0x20, 0x27, 0x55, 0x3f, 0x35, 0x39,
 	0x23, 0xdf, 0x8a, 0x51, 0x2b, 0x89, 0x0d, 0xec, 0x12, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff,
 	0x3e, 0xa5, 0x7b, 0xe8, 0xbd, 0x00, 0x00, 0x00,
+}
+
+type EchoServiceGinServer struct {
+	GServer EchoServiceServer
+}
+
+func NewEchoServiceGinServer(s EchoServiceServer) *EchoServiceGinServer {
+	web := &EchoServiceGinServer{
+		GServer: s,
+	}
+	return web
+}
+func (s *EchoServiceGinServer) Echo(c *gin.Context) {
+	var in StringMessage
+	if err := jsonpb.Unmarshal(c.Request.Body, &in); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if resp, err := s.GServer.Echo(c, &in); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, resp)
+	}
+}
+func (s *EchoServiceGinServer) RegisterEchoServiceHander(e *gin.Engine) {
+	echoservice := e.Group("/api.EchoService")
+	{
+		echoservice.POST("/Echo", s.Echo)
+	}
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
